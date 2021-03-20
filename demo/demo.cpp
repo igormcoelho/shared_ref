@@ -6,6 +6,39 @@
 template<class T>
 using nn_shared_ptr = gsl::not_null<std::shared_ptr<T>>;
 
+class Person
+{
+public:
+};
+
+class Company
+{
+public:
+   Company(Person& _owner, std::vector<Person*> _employees)
+     : owner{ _owner }
+     , employees{ _employees }
+   {
+   }
+
+private:
+   Person& owner;                  // shared ownership?
+   std::vector<Person*> employees; // shared ownership?
+};
+
+class Company2
+{
+public:
+   Company2(nn::shared<Person>& _manager, std::vector<nn::shared<Person>>& _employees)
+     : manager{ _manager }
+     , employees{ _employees }
+   {
+   }
+
+private:
+   nn::shared<Person> manager;                // shared ownership!
+   std::vector<nn::shared<Person>> employees; // shared ownership!
+};
+
 int
 main()
 {
@@ -58,6 +91,16 @@ main()
 
    nn::shared<std::vector<int>> nnsptr_3{ new std::vector<int>(10, 1) };
    std::cout << "v[0] = " << nnsptr_3->at(0) << std::endl;
+
+   // =========================================
+   // nn::shared is allowed inside vectors
+   //
+   std::vector<nn::shared<int>> vshared;
+   vshared.push_back(nn::shared<int>{ new int{ 1 } });
+   vshared.push_back(nn::shared<int>{ new int{ 2 } });
+   vshared.push_back(nn::shared<int>{ new int{ 3 } });
+   // should print '123'
+   std::cout << vshared[0] << vshared[1] << vshared[2] << std::endl;
 
    return 0;
 }
