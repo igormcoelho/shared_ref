@@ -89,4 +89,6 @@ Feel free to suggest other interesting extensions.
 
 ## License
 
-MIT License (2021)
+The initial version was developed by [@igormcoelho](https://github.com/igormcoelho) and [@fellipessanha](https://github.com/fellipessanha), released under **MIT License**. 
+
+Copyleft 2021
