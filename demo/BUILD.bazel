@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "demo_nnshared",
+    srcs = ["demo.cpp"],
+    copts = ['-std=c++17'],
+    deps = ["//src/nnshared:nnshared_lib"]
+)
