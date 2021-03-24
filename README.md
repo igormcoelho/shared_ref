@@ -2,7 +2,7 @@
 
 ## What is it?
 
-**nnshared** is a **Not Null Shared Pointer** library ([single-header](./src/nnshared/shared.hpp)) for Modern C++.
+**nnshared** is a **Not Null Shared Pointer** library ([single-header+GSL](./src/nnshared/shared.hpp)) for Modern C++.
 
 ## FAQ
 
