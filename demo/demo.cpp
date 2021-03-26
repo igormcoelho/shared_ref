@@ -102,5 +102,23 @@ main()
    // should print '123'
    std::cout << vshared[0] << vshared[1] << vshared[2] << std::endl;
 
+
+   // ==========================================
+   // derived classes have automatic cast
+   //
+   class A 
+   {
+      public:
+   };
+
+   class B : public A
+   {
+      public:
+   };
+   nn::shared<B> b {new B};
+   nn::shared<B> b2 = b;
+   nn::shared<A> a = b;
+   
+
    return 0;
 }
