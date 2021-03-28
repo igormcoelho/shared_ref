@@ -1,4 +1,4 @@
-#include <gsl/gsl> // not_null
+#include <gsl/gsl> // not_null (local copy)
 #include <memory>  // shared_ptr
 
 // Not Null Shared Pointer
@@ -10,8 +10,33 @@ namespace nn {
 template<typename T>
 class shared
 {
+   using shared_type = T;
+
 public:
    gsl::not_null<std::shared_ptr<T>> data_;
+
+   // this constructor can be used to "move" into new shared_ptr versions
+   // this requires a copy constructor over the type X (must be concrete)
+   template<class X,
+            typename = typename std::enable_if<
+              std::is_convertible<X*, T*>::value>::type,
+            typename = typename std::enable_if<
+              std::is_copy_constructible<X>::value>::type>
+   shared(X&& other)
+     : data_{ std::shared_ptr<T>{ new X(other) } }
+   {
+   }
+
+   // this is for existing references (must have copy constructor)
+   template<class X,
+            typename = typename std::enable_if<
+              std::is_convertible<X*, T*>::value>::type,
+            typename = typename std::enable_if<
+              std::is_copy_constructible<X>::value>::type>
+   shared(const X& other)
+     : data_{ std::shared_ptr<T>{ new X(other) } }
+   {
+   }
 
    shared(const shared<T>& other)
      : data_{ other.data_ }
@@ -59,14 +84,12 @@ public:
       return *data_;
    }
 
-   // cast operator for derived class: Y& y = t, or Y* y = &t
-   // example (B extends A): shared<B> b = ...; shared<A> a = b;
    template<class Y,
             typename = typename std::enable_if<
               std::is_convertible<T*, Y*>::value>::type>
-   operator shared<Y>() // not explicit for now
+   operator shared<Y>() // explicit? not necessary... (until now)
    {
-      std::shared_ptr<Y> py = data_.get(); // remove not null layer for cast
+      std::shared_ptr<Y> py = data_.get(); // remove encapsulation from not_null
       return py;
    }
 };
