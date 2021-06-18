@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 //
-#include <nnptr/shared.hpp>
+#include <nnptr/nnshared.hpp>
 
 template<class Lhs, class Rhs>
 bool
@@ -23,13 +23,13 @@ main()
    // ========= FIRST TEST ==========
    int* myptr = nullptr;
    // next line breaks on Debug only (without -DNDEBUG)
-   nn::nnptr<int*> ptr = myptr;
+   nnptr::NotNull<int*> ptr = myptr;
    std::shared_ptr<int> sptr{ new int{ 10 } };
    //
    //checkValues(ptr, sptr); // SHOULD compile-break if uncommented (cannot even compare with nullptr...)
 
    // ========= SECOND TEST ==========
-   nn::nnptr<std::unique_ptr<TestClass>> some_unique{ std::make_unique<TestClass>() };
+   nnptr::NotNull<std::unique_ptr<TestClass>> some_unique{ std::make_unique<TestClass>() };
 
    //TestClass some_class = std::move(*some_unique);
    TestClass some_class = *some_unique;

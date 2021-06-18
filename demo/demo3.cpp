@@ -2,9 +2,9 @@
 #include <iostream>
 #include <memory>
 //
-#include <nnptr/shared.hpp>
+#include <nnptr/nnshared.hpp>
 
-// nn::nnptr is still a zero cost abstraction (on Release)
+// nnptr::NotNull is still a zero cost abstraction (on Release)
 // https://github.com/microsoft/GSL/issues/877
 
 int
@@ -14,7 +14,7 @@ foo(int* ptr)
 }
 
 int
-bar(nn::nnptr<int*> ptr)
+bar(nnptr::NotNull<int*> ptr)
 {
    return *ptr;
 }
