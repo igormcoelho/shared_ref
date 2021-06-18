@@ -4,7 +4,7 @@
 #include <vector>
 
 template<class T>
-using nn_shared_ptr = gsl::not_null<std::shared_ptr<T>>;
+using nn_shared_ptr = nn::nnptr<std::shared_ptr<T>>;
 
 class Person
 {
@@ -17,8 +17,7 @@ public:
    Company(Person& _owner, std::vector<Person*> _employees)
      : owner{ _owner }
      , employees{ _employees }
-   {
-   }
+   {}
 
 private:
    Person& owner;                  // shared ownership?
@@ -28,11 +27,11 @@ private:
 class Company2
 {
 public:
-   Company2(nn::shared<Person>& _manager, std::vector<nn::shared<Person>>& _employees)
+   Company2(nn::shared<Person>& _manager,
+            std::vector<nn::shared<Person>>& _employees)
      : manager{ _manager }
      , employees{ _employees }
-   {
-   }
+   {}
 
 private:
    nn::shared<Person> manager;                // shared ownership!
@@ -50,7 +49,7 @@ main()
    // ==========================================
    // fails to create explicit nullptr (good thing!)
    //
-   //nn::shared<int> p2(nullptr); // FAIL: not allowed!
+   // nn::shared<int> p2(nullptr); // FAIL: not allowed!
 
    // ==========================================
    // copy shared ownership of object
@@ -67,7 +66,7 @@ main()
    // ==========================================
    // cannot pass ownership of local reference (only pointers)
    int x5 = 10;
-   //nn::shared<int> p5 = x5; // FAIL: cannot build from 'int'
+   // nn::shared<int> p5 = x5; // FAIL: cannot build from 'int'
    nn::shared<int> p5(new int{ p1 + p4 }); // OK: can pack pointer
 
    // ==========================================
@@ -79,7 +78,7 @@ main()
 
    // =========================================
    // even better for complex scenarios
-   gsl::not_null<std::shared_ptr<std::vector<int>>> nnsptr_1{
+   nn::nnptr<std::shared_ptr<std::vector<int>>> nnsptr_1{
       std::shared_ptr<std::vector<int>>(new std::vector<int>(10, 1))
    };
    std::cout << "v[0] = " << nnsptr_1.get().get()->at(0) << std::endl;
@@ -102,23 +101,21 @@ main()
    // should print '123'
    std::cout << vshared[0] << vshared[1] << vshared[2] << std::endl;
 
-
    // ==========================================
    // derived classes have automatic cast
    //
-   class A 
+   class A
    {
-      public:
+   public:
    };
 
    class B : public A
    {
-      public:
+   public:
    };
-   nn::shared<B> b {new B};
+   nn::shared<B> b{ new B };
    nn::shared<B> b2 = b;
    nn::shared<A> a = b;
-   
 
    return 0;
 }
