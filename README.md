@@ -63,6 +63,11 @@ Access of the internal object is still complex, and `auto` is not very helpful.
 Not anymore. We decided to create our own version of `gsl::not_null` named `nn:nnptr`.
 One difference is that we disable all checks during `-DNDEBUG`, bringing absolute Zero Overhead to Release/Production.
 
+### What's the difference of `gsl::not_null` and `nn::nnptr`?
+
+Basically, we disallow comparisons with nullptr (see operator== special cases) and disable checks with `-DNDEBUG`.
+The rest of the logic is kept pretty much the same as `gsl::not_null`, for compatibility reasons.
+
 ### Which C++ Standard is required?
 
 Currently, you will need `C++14` or newer.
