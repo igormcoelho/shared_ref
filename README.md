@@ -2,13 +2,13 @@
 
 ## What is it?
 
-**nnshared** is a **Not Null Shared Pointer** library ([single-header](./src/nnshared/shared.hpp)+GSL) for Modern C++.
+**nnshared** is a **Not Null Shared Pointer** library ([single-header](./src/nnshared/shared.hpp)) for Modern C++.
 
 ## FAQ
 
 ### How is it implemented?
 
-**nnshared** basically uses `not_null` from [Guidelines Support Library - GSL](https://github.com/Microsoft/GSL) together with `std::shared_ptr` (since C++11).
+**nnshared** basically uses `not_null` from [Guidelines Support Library - GSL](https://github.com/Microsoft/GSL) together with `std::shared_ptr` (since C++11). No GSL support/dependency is needed here, REALLY just add the header, and that's all.
 
 ### Why not just use `shared_ptr`?
 
@@ -57,6 +57,15 @@ std::cout << "v[0] = " << nnsptr_2.get().get()->at(0) << std::endl;
 ```
 
 Access of the internal object is still complex, and `auto` is not very helpful.
+
+### Is `gsl::not_null` necessary here?
+
+Not anymore. We decided to create our own version of `gsl::not_null` named `nn:nnptr`.
+One difference is that we disable all checks during `-DNDEBUG`, bringing absolute Zero Overhead to Release/Production.
+
+### Which C++ Standard is required?
+
+Currently, you will need `C++14` or newer.
 
 ### How to implement this with `nn::shared`?
 
