@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <nnshared/shared.hpp>
+#include <nnptr/shared.hpp>
 #include <vector>
 
 template<class T>

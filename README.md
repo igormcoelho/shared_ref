@@ -1,14 +1,14 @@
-# nnshared
+# nnptr
 
 ## What is it?
 
-**nnshared** is a **Not Null Shared Pointer** library ([single-header](./src/nnshared/shared.hpp)) for Modern C++.
+**nnptr** is a **Not Null Shared Pointer** library ([single-header](./src/nnptr/shared.hpp)) for Modern C++.
 
 ## FAQ
 
 ### How is it implemented?
 
-**nnshared** basically uses `not_null` from [Guidelines Support Library - GSL](https://github.com/Microsoft/GSL) together with `std::shared_ptr` (since C++11). No GSL support/dependency is needed here, REALLY just add the header, and that's all.
+**nnptr** basically uses `not_null` from [Guidelines Support Library - GSL](https://github.com/Microsoft/GSL) together with `std::shared_ptr` (since C++11). No GSL support/dependency is needed here, REALLY just add the header, and that's all.
 
 ### Why not just use `shared_ptr`?
 

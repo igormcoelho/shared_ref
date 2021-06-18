@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 //
-#include <nnshared/shared.hpp>
+#include <nnptr/shared.hpp>
 
 template<class Lhs, class Rhs>
 bool

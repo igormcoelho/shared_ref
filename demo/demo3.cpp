@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 //
-#include <nnshared/shared.hpp>
+#include <nnptr/shared.hpp>
 
 // nn::nnptr is still a zero cost abstraction (on Release)
 // https://github.com/microsoft/GSL/issues/877

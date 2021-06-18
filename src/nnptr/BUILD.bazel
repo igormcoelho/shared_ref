@@ -5,11 +5,11 @@ package(
 )
 
 cc_library(
-    name = "nnshared_lib",
+    name = "nnptr_lib",
     hdrs = glob([
         "*.hpp",
     ]),
-    include_prefix = "nnshared/",
-    deps = ["//libs/GSL/include/gsl:gsl_lib"]
+    include_prefix = "nnptr/",
+    #deps = ["//libs/GSL/include/gsl:gsl_lib"]
     #deps = ["//libs:gsl_lib"]
 )
