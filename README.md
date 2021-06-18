@@ -2,7 +2,7 @@
 
 ## What is it?
 
-**nnptr** is a **Not Null Shared Pointer** library ([single-header](./src/nnptr/shared.hpp)) for Modern C++.
+**nnptr** is a **Not Null Shared Pointer** library ([single-header](./src/nnptr/nnshared.hpp)) for Modern C++.
 
 ## FAQ
 
