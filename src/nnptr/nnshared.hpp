@@ -1,11 +1,13 @@
 
 #ifndef NNPTR_NNSHARED_HPP
 #define NNPTR_NNSHARED_HPP
-// ====================================================================
+// ====================================================
 // Not Null Shared Pointer (nnptr::shared)
-// Authors: Igor M. Coelho & Fellipe Pessanha
+// github.com/igormcoelho/nnptr
+// Maintainer: Igor M. Coelho
+// First version by  Igor M. Coelho & Fellipe Pessanha
 // MIT License (2021)
-// ====================================================================
+// ====================================================
 
 // This library depends on...
 
