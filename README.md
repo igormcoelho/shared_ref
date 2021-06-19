@@ -4,6 +4,32 @@
 
 **nnptr** is a **Not Null Shared Pointer** library ([single-header](./src/nnptr/nnshared.hpp)) for Modern C++.
 
+## Demo
+
+In this demo we use `sref` to denote a "shared reference", which is "more or less" the
+interpretation of `nnptr::NNShared` (in fact it is a not-null shared pointer, but since
+most compilers translate `int&` as `int*`, we can use `sref<int>` as `int&`).
+
+```   
+#include <iostream>              // just for printing in demo
+#include <nnptr/nnshared.hpp>    // single header 
+
+template<class R>
+using sref = nnptr::NNShared<R>; // simplify notation using 'sref'
+
+sref<double>
+foo(sref<int> si) {
+   double d = *si;               // gets copy of element using operator*
+   return new double{ d };       // creates new 'sref' by passing pointer
+}
+
+int main() {
+   auto sd = foo(10); // converts 10 into a shared_ptr<int> with value 10
+   std::cout << sd << std::endl; // prints 10.0
+   return 0;
+}
+```
+
 ## FAQ
 
 ### How is it implemented?

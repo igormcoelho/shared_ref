@@ -1,6 +1,6 @@
-//#include <gsl/gsl> // NotNull (local copy)
-#include <memory> // shared_ptr
 
+#ifndef NNPTR_NNSHARED_HPP
+#define NNPTR_NNSHARED_HPP
 // ====================================================================
 // Not Null Shared Pointer (nnptr::shared)
 // Authors: Igor M. Coelho & Fellipe Pessanha
@@ -9,10 +9,16 @@
 
 // This library depends on...
 
-// ====================================================================
-// NotNull: an alternative to gsl::NotNull, but with NDEBUG removing all
-// 'NotNull' during Release
-// ====================================================================
+// ========================================================================
+// NotNull is an alternative to gsl::not_null, but with NDEBUG removing all
+// 'NotNull' during Release (or use flag NO_NNPTR_CHECKS instead of NDEBUG).
+// ========================================================================
+
+#ifdef NDEBUG
+#define NO_NNPTR_CHECKS
+#endif
+
+#include <memory> // shared_ptr
 
 // =============
 // For nnptr::NotNull
@@ -24,12 +30,12 @@
 #include <system_error> // for hash
 #include <type_traits>  // for enable_if_t, is_convertible, is_assignable
 
-// ======================
+// =========================
 // begin nnptr::NotNull part
-// ======================
+// =========================
 
 // =============================================
-// Same assumptions are valid from gsl::NotNull
+// Same assumptions are valid from gsl::not_null
 // =============================================
 //
 // nnptr::NotNull restricts a pointer to only hold non-null values (enforced during
@@ -46,7 +52,7 @@
 //
 
 // ==============================================
-// code for NotNull (compatible with gsl::NotNull)
+// code for NotNull (compatible with gsl::not_null)
 // reference: https://github.com/microsoft/GSL/blob/b26f6d5ec7b043f9d459c1dfdd6da4d930d4e9b4/include/gsl/pointers
 // date: 17-jun-2021
 // ==============================================
@@ -78,7 +84,7 @@ public:
    constexpr NotNull(U&& u)
      : ptr_(std::forward<U>(u))
    {
-#ifndef NDEBUG
+#ifndef NO_NNPTR_CHECKS
       if (ptr_ == nullptr)
          std::terminate();
 #endif
@@ -88,7 +94,7 @@ public:
    constexpr NotNull(T u)
      : ptr_(std::move(u))
    {
-#ifndef NDEBUG
+#ifndef NO_NNPTR_CHECKS
       if (ptr_ == nullptr)
          std::terminate();
 #endif
@@ -103,7 +109,7 @@ public:
    NotNull& operator=(const NotNull& other) = default;
    constexpr std::conditional_t<std::is_copy_constructible<T>::value, T, const T&> get() const
    {
-#ifndef NDEBUG
+#ifndef NO_NNPTR_CHECKS
       if (ptr_ == nullptr)
          std::terminate();
 #endif
@@ -132,13 +138,6 @@ private:
 };
 
 template<class T>
-auto
-make_NotNull(T&& t) noexcept
-{
-   return NotNull<std::remove_cv_t<std::remove_reference_t<T>>>{ std::forward<T>(t) };
-}
-
-template<class T>
 std::ostream&
 operator<<(std::ostream& os, const NotNull<T>& val)
 {
@@ -154,7 +153,7 @@ operator==(const NotNull<T>& lhs,
 {
    return lhs.get() == rhs.get();
 }
-// should prevent comparisons with nullptr_t (from igor)
+// should prevent comparisons with nullptr_t (from NotNull)
 template<class T>
 bool
 operator==(const NotNull<T>& lhs, std::nullptr_t nptr) = delete;
@@ -167,7 +166,7 @@ operator!=(const NotNull<T>& lhs,
 {
    return lhs.get() != rhs.get();
 }
-// should prevent comparisons with nullptr_t (from igor)
+// should prevent comparisons with nullptr_t (from NotNull)
 template<class T>
 bool
 operator!=(const NotNull<T>& lhs, std::nullptr_t nptr) = delete;
@@ -317,3 +316,5 @@ public:
 };
 
 } // namespace nn
+
+#endif // NNPTR_NNSHARED_HPP

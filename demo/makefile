@@ -1,4 +1,7 @@
-all: demo demo2 demo3
+all: demo_simple demo demo2 demo3 
+
+demo_simple:
+	g++ -I../src demo_simple.cpp -Wfatal-errors -o nn_demo_simple
 
 demo:
 	g++ -I../src demo.cpp -Wfatal-errors -o nn_demo

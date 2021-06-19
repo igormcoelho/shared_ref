@@ -9,7 +9,5 @@ cc_library(
     hdrs = glob([
         "*.hpp",
     ]),
-    include_prefix = "nnptr/",
-    #deps = ["//libs/GSL/include/gsl:gsl_lib"]
-    #deps = ["//libs:gsl_lib"]
+    include_prefix = "nnptr/"
 )
