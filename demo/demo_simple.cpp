@@ -17,5 +17,7 @@ main()
 {
    auto sd = foo(10);
    std::cout << sd << std::endl;
+   sd++;
+   std::cout << sd << std::endl;
    return 0;
 }
