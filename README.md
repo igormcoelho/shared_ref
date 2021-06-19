@@ -24,9 +24,9 @@ foo(sref<int> si) {
 }
 
 int main() {
-   auto sd = foo(10); // converts 10 into a shared_ptr<int> with value 10
+   auto sd = foo(10);            // converts 10 into a shared_ptr<int> with value 10
    std::cout << sd << std::endl; // prints 10.0
-   return 0;
+   return 0;                     // no memory is leaked or lost
 }
 ```
 
