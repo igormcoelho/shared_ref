@@ -214,6 +214,6 @@ Feel free to suggest other interesting extensions.
 
 ## License
 
-The initial version was developed by [@igormcoelho](https://github.com/igormcoelho) and [@fellipessanha](https://github.com/fellipessanha), released under **MIT License**. 
+This project is maintained by [@igormcoelho](https://github.com/igormcoelho), under **MIT License**. 
 
 Copyleft 2021
