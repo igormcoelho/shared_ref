@@ -17,8 +17,9 @@ most compilers translate `int&` as `int*`, we can use `sref<int>` as `int&`).
 template<class R>
 using sref = nnptr::NNShared<R>; // simplify notation using 'sref'
 
-sref<double>
-foo(sref<int> si) {
+// one can read 'foo' as: double& foo(int& si) { ... }
+
+sref<double> foo(sref<int> si) {
    double d = *si;               // gets copy of element using operator*
    return new double{ d };       // creates new 'sref' by passing pointer
 }
