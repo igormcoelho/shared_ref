@@ -50,17 +50,17 @@ The intention is to avoid ugly error messages, when things go wrong, specially f
 Suppose one wants to create a vector of five elements (with value `1`):
 
 ```
-std::vector<int> v(10, 1);
+std::vector<int> v(5, 1);
 ```
 
-Easy to do as an stack element, let's do it with a *shared ownership* strategy between several entities.
+Easy to do as an stack element, let's do it with a *shared ownership* strategy between several entities (such as `std::vector<int>&` working as `std::shared_ptr`).
 Although it may look the same for experienced developers (example for `std::vector<int>`):
 
 ```
 gsl::not_null<std::shared_ptr<std::vector<int>>> nnsptr_1{
-        std::shared_ptr<std::vector<int>>(new std::vector<int>(10, 1))
+        std::shared_ptr<std::vector<int>>(new std::vector<int>(5, 1))
     };
-//
+// getting the first element in vector
 std::cout << "v[0] = " << nnsptr_1.get().get()->at(0) << std::endl;
 ```
 
@@ -79,13 +79,26 @@ However, it still requires complex initialization of the passed pointer:
 
 ```
 nn_shared_ptr<std::vector<int>> nnsptr_2{
-        std::shared_ptr<std::vector<int>>(new std::vector<int>(10, 1))
+        std::shared_ptr<std::vector<int>>(new std::vector<int>(5, 1))
     };
-
+// getting the first element in vector
 std::cout << "v[0] = " << nnsptr_2.get().get()->at(0) << std::endl;
 ```
 
 Access of the internal object is still complex, and `auto` is not very helpful.
+
+### And how to do the same with `nnptr::NNShared<T>` as a readable `sref` type?
+
+```
+template<class T>
+using sref = nnptr::NNShared<T>;
+
+sref<std::vector<int>> nnsptr_3{ std::vector<int>(5, 1) };
+// getting the first element in vector
+std::cout << "v[0] = " << nnsptr_3->at(0) << std::endl;
+```
+
+Perfect.
 
 ### Is `gsl::not_null` necessary here?
 
