@@ -20,7 +20,7 @@ using sref = nnptr::NNShared<R>; // simplify notation using 'sref'
 // one can read 'foo' as: double& foo(int& si) { ... }
 
 sref<double> foo(sref<int> si) {
-   double d = *si;               // gets copy of element using operator*
+   double d = si;                // gets copy of element using implicit operator*
    return new double{ d };       // creates new 'sref' by passing pointer
 }
 
@@ -28,7 +28,7 @@ int main() {
    auto sd = foo(10);            // converts 10 into a shared_ptr<int> with value 10
    std::cout << sd << std::endl; // prints 10.0
    sd++;                         // this is NOT pointer arithmetic, but operator double&
-   std::cout << sd << std::endl; // prints 11.0
+   std::cout << *sd << std::endl;// prints 11.0 (operator* is optional here)
    return 0;                     // no memory is leaked or lost
 }
 ```

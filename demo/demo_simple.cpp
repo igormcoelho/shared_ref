@@ -8,7 +8,7 @@ using sref = nnptr::NNShared<R>;
 sref<double>
 foo(sref<int> si)
 {
-   double d = *si;
+   double d = si;
    return new double{ d };
 }
 
@@ -18,6 +18,6 @@ main()
    auto sd = foo(10);
    std::cout << sd << std::endl;
    sd++;
-   std::cout << sd << std::endl;
+   std::cout << *sd << std::endl;
    return 0;
 }
