@@ -7,7 +7,7 @@
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}",
     "editor.formatOnSave": true,
     "clang-tidy.compilerArgsBefore": [
-        "-Isrc/",
+        "-Iinclude/",
         "-std=c++14",
     ],
     "testMate.cpp.test.executables": "{tests,build,Build,BUILD,out,Out,OUT}/**/*{test,Test,TEST}*",
