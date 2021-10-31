@@ -317,6 +317,12 @@ public:
       return *data_;
    }
 
+   // method 'sptr' should be taken only in extreme/compatibility cases
+   std::shared_ptr<T> sptr() const
+   {
+      return data_;
+   }
+
    NNShared<T>& operator=(const NNShared<T>& other)
    {
       // self-reference
