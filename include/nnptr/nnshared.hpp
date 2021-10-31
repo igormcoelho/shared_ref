@@ -291,7 +291,15 @@ public:
 
    T* operator->() { return data_.get().get(); }
 
+   const T* operator->() const { return data_.get().get(); }
+
    T& operator*()
+   {
+      // return dereferenced shared object
+      return *data_;
+   }
+
+   const T& operator*() const
    {
       // return dereferenced shared object
       return *data_;
@@ -301,6 +309,24 @@ public:
    {
       // return dereferenced shared object
       return *data_;
+   }
+
+   const T& get() const
+   {
+      // return dereferenced shared object
+      return *data_;
+   }
+
+   NNShared<T>& operator=(const NNShared<T>& other)
+   {
+      // self-reference
+      if (this == &other)
+         return *this;
+
+      // ASSUME NON-NULL FOR operator=
+      (*this->data_) = (*other.data_);
+
+      return *this;
    }
 
    operator T&()
