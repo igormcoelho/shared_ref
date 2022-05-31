@@ -1,10 +1,9 @@
 
 #include <iostream>
-#include <nnptr/nnshared.hpp>
+#include <nnptr/sref.hpp>
 #include <vector>
 
-template<class R>
-using sref = nnptr::NNShared<R>;
+using nnptr::sref;
 
 sref<double>
 foo(sref<int> si)

@@ -8,5 +8,5 @@ cc_binary(
     name = "demo_nnshared",
     srcs = ["demo.cpp"],
     copts = ['-std=c++14'],
-    deps = ["//src/nnshared:nnshared_lib"]
+    deps = ["//include/nnptr:nnptr_lib"]
 )

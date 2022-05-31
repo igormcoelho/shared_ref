@@ -2,20 +2,21 @@
 
 ## What is it?
 
-**nnptr** is a **Not Null Shared Pointer** library ([single-header](./src/nnptr/nnshared.hpp)) for Modern C++.
+**nnptr** is a **Not Null Shared Pointer** (or **shared reference**) library ([single-header](./src/nnptr/sref.hpp)) for Modern C++.
 
 ## Demo
 
-In this demo we use `sref` to denote a "shared reference", which is "more or less" the
-interpretation of `nnptr::NNShared` (in fact it is a not-null shared pointer, but since
-most compilers translate `int&` as `int*`, we can use `sref<int>` as `int&`).
+In this library we use `nnptr::sref` to denote a "shared reference", which is "more or less" the
+interpretation of "a not-null shared pointer". 
+In the same way that most compilers translate `int&` as `int*`, we can use `sref<int>` as `int&`,
+with the extra benefit of having "shared ownership" semantics 
+(so, it's guaranteed that memory will never dangle for sref, differently from a native reference).
 
 ```   
-#include <iostream>              // just for printing in demo
-#include <nnptr/nnshared.hpp>    // single header 
+#include <iostream>          // just for printing in demo
+#include <nnptr/sref.hpp>    // single header 
 
-template<class R>
-using sref = nnptr::NNShared<R>; // simplify notation using 'sref'
+using nnptr::sref;           // simplify notation using 'sref'
 
 // one can read 'foo' as: double& foo(int& si) { ... }
 
@@ -87,13 +88,10 @@ std::cout << "v[0] = " << nnsptr_2.get().get()->at(0) << std::endl;
 
 Access of the internal object is still complex, and `auto` is not very helpful.
 
-### And how to do the same with `nnptr::NNShared<T>` as a readable `sref` type?
+### And how to do the same with `nnptr::sref<T>` as a readable `sref` type?
 
 ```
-template<class T>
-using sref = nnptr::NNShared<T>;
-
-sref<std::vector<int>> nnsptr_3{ std::vector<int>(5, 1) };
+nnptr::sref<std::vector<int>> nnsptr_3{ std::vector<int>(5, 1) };
 // getting the first element in vector
 std::cout << "v[0] = " << nnsptr_3->at(0) << std::endl;
 ```
@@ -114,38 +112,41 @@ The rest of the logic is kept pretty much the same as `gsl::not_null`, for compa
 
 Currently, you will need `C++14` or newer.
 
-### How to implement this with `nnptr::NNShared`?
+### How to implement this with `nnptr::sref`?
 
-Finally, we have some simple implementation using `nnptr::NNShared` class:
+Finally, we have some simple implementation using `nnptr::sref` class:
 
 ```
-nnptr::NNShared<std::vector<int>> nnsptr_3{ new std::vector<int>(10, 1) };
+nnptr::sref<std::vector<int>> nnsptr_3{ new std::vector<int>(10, 1) };
 std::cout << "v[0] = " << nnsptr_3->at(0) << std::endl;
 ```
 
-### Can I pass `nullptr` into `nnptr::NNShared`?
+### Can I pass `nullptr` into `nnptr::sref`?
 
 **No.** You cannot do it (by contract).
 
 Something like this would fail in compile-time:
 
 ```
-nnptr::NNShared<int> p { nullptr };  // compile time error
+nnptr::sref<int> p { nullptr };  // compile time error
 ```
 
 Something like this would fail in runtime:
 
 ```
 int* p_int = nullptr;
-nnptr::NNShared<int> p { p_int };    // runtime error
+nnptr::sref<int> p { p_int };    // runtime error
 ```
 
 
 ### Why not call it shared references or `shared_ref`?
 
-A C++ reference is an *alias* to other variable, so meaning/purpose is different when compared to *const pointers* (which are *real* variables).
+It's a possibility, but `sref` is shorter.
+Note that a C++ reference `T&` is an *alias* to other variable, so meaning/purpose is slightly different when compared to *const pointers* like `T* const` (which are *real* pass-by-copy objects).
 
-So, naming is precise: `nnshared` provides an implementation of *not null shared pointers*.
+The semantics adopted here are the same as references: no nullability allowed and including shared ownership semantics (with reference counting).
+
+So, `sref` provides an implementation of *shared references* or even *not null shared pointers*, if you prefer this way.
 
 
 ### Why not just use references?
@@ -154,7 +155,7 @@ This is a tricky question. For most scenarios, references are enough, although s
 
 Given a set of distinct component implementations, it is unfortunate that some may be passed as references, while others must be received as pointers, e.g., when a list (or vector) of components is given. This yields different treatments for each type of component (*should I delete it or not?*), thus making it hard for new users to understand each case.
 
-By using `nnptr::NNShared` strategy, one may introduce some overheads (when compared to native references), but of negligible costs since employed strategies heavily depend on compile-time optimizations.
+By using `nnptr::sref` strategy, one may introduce some overheads (when compared to native references), but of negligible costs since employed strategies heavily depend on compile-time optimizations.
 
 ### Can you give me a more concrete example of usage?
 
@@ -187,21 +188,21 @@ private:
 
 In this scenario, both *manager* and *employees* may have distinct storages (*manager* on the stack and each *employee* on the heap). It is hard to realize memory ownership in this scenario, so as to prevent empty *employee* pointer to be passed.
 
-The intention is clear when explicitly defining memory model with `nnptr::NNShared`:
+The intention is clear when explicitly defining memory model with `nnptr::sref`:
 
 ```
 class Company2
 {
 public:
-   Company2(nnptr::NNShared<Person>& _manager, std::vector<nnptr::NNShared<Person>>& _employees)
+   Company2(nnptr::sref<Person>& _manager, std::vector<nnptr::sref<Person>>& _employees)
      : manager{ _manager }
      , employees{ _employees }
    {
    }
 
 private:
-   nnptr::NNShared<Person> manager;                // shared ownership!
-   std::vector<nnptr::NNShared<Person>> employees; // shared ownership!
+   nnptr::sref<Person> manager;                // shared ownership!
+   std::vector<nnptr::sref<Person>> employees; // shared ownership!
 };
 ```
 

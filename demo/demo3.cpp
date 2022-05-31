@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 //
-#include <nnptr/nnshared.hpp>
+#include <nnptr/sref.hpp>
 
 // nnptr::NotNull is still a zero cost abstraction (on Release)
 // https://github.com/microsoft/GSL/issues/877

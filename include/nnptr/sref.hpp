@@ -1,8 +1,8 @@
 
-#ifndef NNPTR_NNSHARED_HPP
-#define NNPTR_NNSHARED_HPP
+#ifndef NNPTR_SREF_HPP
+#define NNPTR_SREF_HPP
 // ====================================================
-// Not Null Shared Pointer (nnptr::shared)
+// Not Null Shared Pointer (nnptr::sref)
 // github.com/igormcoelho/nnptr
 // Maintainer: Igor M. Coelho
 // First version by  Igor M. Coelho & Fellipe Pessanha
@@ -234,13 +234,13 @@ struct hash<nnptr::NotNull<T>>
 } // namespace std
 
 // ======================
-// begin nnptr::NNShared part
+// begin nnptr::sref part
 // ======================
 
 namespace nnptr {
 //
 template<typename T>
-class NNShared
+class sref
 {
    using shared_type = T;
 
@@ -255,7 +255,7 @@ public:
        typename std::enable_if<std::is_convertible<X*, T*>::value>::type,
      typename =
        typename std::enable_if<std::is_copy_constructible<X>::value>::type>
-   NNShared(X&& other)
+   sref(X&& other)
      : data_{ std::shared_ptr<T>{ new X(other) } }
    {}
 
@@ -266,28 +266,28 @@ public:
        typename std::enable_if<std::is_convertible<X*, T*>::value>::type,
      typename =
        typename std::enable_if<std::is_copy_constructible<X>::value>::type>
-   NNShared(const X& other)
+   sref(const X& other)
      : data_{ std::shared_ptr<T>{ new X(other) } }
    {}
 
-   NNShared(const NNShared<T>& other)
+   sref(const sref<T>& other)
      : data_{ other.data_ }
    {}
 
-   NNShared(const NNShared<T>&& corpse)
+   sref(const sref<T>&& corpse)
      : data_{ corpse.data_ }
    {}
 
-   NNShared(std::shared_ptr<T>& data)
+   sref(std::shared_ptr<T>& data)
      : data_{ data }
    {}
 
-   NNShared(T* data)
+   sref(T* data)
      : data_{ std::shared_ptr<T>{ data } }
    {}
 
    // disallow explicit nullptr
-   NNShared(std::nullptr_t data) = delete;
+   sref(std::nullptr_t data) = delete;
 
    T* operator->() { return data_.get().get(); }
 
@@ -323,7 +323,7 @@ public:
       return data_;
    }
 
-   NNShared<T>& operator=(const NNShared<T>& other)
+   sref<T>& operator=(const sref<T>& other)
    {
       // self-reference
       if (this == &other)
@@ -342,7 +342,7 @@ public:
    }
 
    template<class Y, typename = typename std::enable_if<std::is_convertible<T*, Y*>::value>::type>
-   operator NNShared<Y>() // explicit? not necessary... (until now)
+   operator sref<Y>() // explicit? not necessary... (until now)
    {
       std::shared_ptr<Y> py = data_.get(); // remove encapsulation from 'NotNull'
       return py;
@@ -351,4 +351,4 @@ public:
 
 } // namespace nn
 
-#endif // NNPTR_NNSHARED_HPP
+#endif // NNPTR_sref_HPP
